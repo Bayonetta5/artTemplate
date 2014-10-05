@@ -1,66 +1,102 @@
-# artTemplate-3.0
+# **artTemplate**
 
-新一代 javascript 模板引擎
+A state-of-the-*art template* engine in JavaScript.
 
-##      	目录
+* **Clean, concise code!** *< 3kb non-gzipped; < 2kb gzipped; no dependencies.*
+* **Lightning fast!** *Up to 20-30 times faster than "Mustache" and alikes.*
+* **Relevant features built-in!** *Runtime debugging, `include` statements for template components, pre-compiled templates and more.* 
+* **State-of-the-art technology!** *Supports server-side environments, such as Node.JS (+ Express), module loaders like RequireJS and any modern web browser.* 
 
-*	[特性](#特性)
-*	[快速上手](#快速上手)
-*	[模板语法](#模板语法)
-*	[下载](#下载)
-*	[方法](#方法)
-*	[NodeJS](#nodejs)
-*	[使用预编译](#使用预编译)
-*	[更新日志](#更新日志)
-*	[授权协议](#授权协议)
+<hr>
 
-##	特性
+## Table of Contents
 
-1.	性能卓越，执行速度通常是 Mustache 与 tmpl 的 20 多倍（[性能测试](http://aui.github.com/artTemplate/test/test-speed.html)）
-2.	支持运行时调试，可精确定位异常模板所在语句（[演示](http://aui.github.io/artTemplate/demo/debug.html)）
-3.	对 NodeJS Express 友好支持
-4.	安全，默认对输出进行转义、在沙箱中运行编译后的代码（Node版本可以安全执行用户上传的模板）
-5.	支持``include``语句
-6.	可在浏览器端实现按路径加载模板（[详情](#使用预编译)）
-7.	支持预编译，可将模板转换成为非常精简的 js 文件
-8.	模板语句简洁，无需前缀引用数据，有简洁版本与原生语法版本可选
-9.	支持所有流行的浏览器
+* Features / Unique Selling Points (USPs)
+* Downloads
+* Quick Start
+ * Write Templates
+ * Render Templates
+* Template Syntax
+ * Concise Syntax
+ * Native Syntax
+* Pre-compiled Templates
+* Methods
+* NodeJS
+ * Installation
+ * Usage
+ * Configuration
+ * NodeJS + Express
+ * Interface Changes
+* Upgrade Notice
+* Changelog
+* License
 
-## 快速上手
+<hr>
 
-### 编写模板
+## Features / USPs
 
-使用一个``type="text/html"``的``script``标签存放模板：
-	
+* Performance - code executes 20-30 times faster compared to [*Mustache*](http://mustache.github.io/), [*tmpl*](https://blueimp.github.io/JavaScript-Templates/) and alikes ([performance benchmark tests](https://aui.github.com/artTemplate/test/test-speed.html)).
+* Security - all input is automatically being escaped and compiled code is being executed within a sandbox envoirement on the server only. (Don't worry about user input!)
+* NodeJS + Express support.
+* Support for runtime debugging, you can pinpoint where the statement is unusual template ([tech slides](http://aui.github.io/artTemplate/demo/debug.html)).
+* Support for `include` statements (!). :)
+* Support for pre-compiled templates (can be converted into a very streamlined template js file).
+* Can be achieved by the browser to load the template path (details).
+* Template concise statement, without prefix reference data, there are concise version of the native syntax versions available.
+* Supported by all modern mobile and desktop browsers.
+
+<hr>
+
+## Downloads
+
+There are two files, one for the concise and another one for the native template syntax.
+
+* [latest template.js](https://raw.github.com/eyecatchup/artTemplate/master/dist/template.js) *(Concise Engine, 2.7kb)* 
+* [latest template-native.js](https://raw.github.com/eyecatchup/artTemplate/master/dist/template-native.js) *(Native Engine, 2.3kb)*
+
+<hr>
+
+## Quick Start
+
+### Write Templates
+
+Use a `type="text/html"` on `script` tags to make it a template. For example:
+
+```html	
 	<script id="test" type="text/html">
 	<h1>{{title}}</h1>
 	<ul>
 	    {{each list as value i}}
-	        <li>索引 {{i + 1}} ：{{value}}</li>
+	        <li>Index {{i + 1}} ：{{value}}</li>
 	    {{/each}}
 	</ul>
 	</script>
+```
 
-### 渲染模板
-	
+### Render Templates
+
+```html		
 	var data = {
-		title: '标签',
-		list: ['文艺', '博客', '摄影', '电影', '民谣', '旅行', '吉他']
+		title: 'tag',
+		list: ['literary', 'blog', 'Photography', 'movie', 'folk', 'travel', 'Guitar']
 	};
 	var html = template('test', data);
 	document.getElementById('content').innerHTML = html;
+```
 
+[Demo](http://eyecatchup.github.com/artTemplate/demo/basic.html)
 
-[演示](http://aui.github.com/artTemplate/demo/basic.html)
+<hr>
 
-##	模板语法
+## Template Syntax
 
-有两个版本的模板语法可以选择。
+artTemplate supports two types of template syntax styles.
 
-###	简洁语法
+###	Concise Syntax
 
-推荐使用，语法简单实用，利于读写。
+Recommended. The syntax is simple and practical to write, and also easier to read for the most.
 
+```html	
 	{{if admin}}
 		{{include 'admin_content'}}
 		
@@ -68,11 +104,12 @@
 			<div>{{$index}}. {{$value.user}}</div>
 		{{/each}}
 	{{/if}}
-	
-[查看语法与演示](https://github.com/aui/artTemplate/wiki/syntax:simple)
+```
+[Read concise syntax docs (Link).](https://github.com/aui/artTemplate/wiki/syntax:simple)
 
-###	原生语法
-	
+###	Native Syntax
+
+```html		
 	<%if (admin){%>
 		<%include('admin_content')%>
 	
@@ -80,217 +117,195 @@
 			<div><%=i%>. <%=list[i].user%></div>
 		<%}%>
 	<%}%>
-
-[查看语法与演示](https://github.com/aui/artTemplate/wiki/syntax:native)
-
-##	下载
-
-* [template.js](https://raw.github.com/aui/artTemplate/master/dist/template.js) *(简洁语法版, 2.7kb)* 
-* [template-native.js](https://raw.github.com/aui/artTemplate/master/dist/template-native.js) *(原生语法版, 2.3kb)*
-
-## 方法
-
-###	template(id, data)
-
-根据 id 渲染模板。内部会根据``document.getElementById(id)``查找模板。
-
-如果没有 data 参数，那么将返回一渲染函数。
-
-###	template.``compile``(source, options)
-
-将返回一个渲染函数。[演示](http://aui.github.com/artTemplate/demo/compile.html)
-
-###	template.``render``(source, options)
-
-将返回渲染结果。
-
-###	template.``helper``(name, callback)
-
-添加辅助方法。
-
-例如时间格式器：[演示](http://aui.github.com/artTemplate/demo/helper.html)
-
-###	template.``config``(name, value)
-
-更改引擎的默认配置。
-
-字段 | 类型 | 默认值| 说明
------------- | ------------- | ------------ | ------------
-openTag | String | ``'{{'`` | 逻辑语法开始标签
-closeTag | String | ``"}}"`` | 逻辑语法结束标签
-escape | Boolean | ``true`` | 是否编码输出 HTML 字符
-cache | Boolean | ``true`` | 是否开启缓存（依赖 options 的 filename 字段）
-compress | Boolean | ``false`` | 是否压缩 HTML 多余空白字符
-	
-##	使用预编译 
-
-可突破浏览器限制，让前端模板拥有后端模板一样的同步“文件”加载能力：
-
-一、**按文件与目录组织模板**
-
 ```
-template('tpl/home/main', data)
-```
+[Read native syntax docs (Link).](https://github.com/aui/artTemplate/wiki/syntax:native)
 
-二、**模板支持引入子模板**
+<hr>
 
+## Pre-compiled Templates
 
-	{{include '../public/header'}}
+Can break through the browser restrictions, so the front template with the same back-end template Sync "file" Load capacity:
 
-###	基于预编译：
+First, according to the template file and directory organization `template('tpl/home/main', data)`.
+Second, the introduction of sub-template template support `{{include '../public/header'}}`.
 
-*	可将模板转换成为非常精简的 js 文件（不依赖引擎）
-*	使用同步模板加载接口
-*	支持多种 js 模块输出：AMD、CMD、CommonJS
-*	支持作为 GruntJS 插件构建
-*	前端模板可共享给 NodeJS 执行
-*	自动压缩打包模板
+Thanks to pre-compiled templates,
 
-预编译工具：[TmodJS](http://github.com/aui/tmodjs/)
+* templates can be converted into a very streamlined js file (independent of the engine)
+* templates can be loaded using asynchronous interfaces
+* modules support a variety of output formats: AMD, CMD, CommonJS
+* GruntJS plugins can be build off of them with ease
+* front-end templates/components can be shared with the (NodeJS) back-end
+* templates can be compressed automatically while packaging
+* Pre-compilation tools: [TmodJS](https://github.com/aui/tmodjs/)
 
-##	NodeJS
+<hr>
 
-###	安装
+## Methods
 
-	npm install art-template
+### `template(elemId, templateData)`
+
+According elemId rendering template. Internal according document.getElementById(elemId) find template.
+
+If the `data` parameter is left undefined, return data is the result of the render function.
+
+### `template.compile(templateObj, templateOpts)`
+
+Returns a rendering function. For an example, see the [this demo](http://aui.github.com/artTemplate/demo/compile.html).
+
+### `template.render(templateObj, templateOpts)`
+
+Returns the rendering results.
+
+### `template.helper(fnName, cbName)`
+
+Add a secondary method. For an example, see the [time format demo](http://aui.github.com/artTemplate/demo/helper.html).
+
+### `template.config(field, value)`
+
+Set template engine configuration option (overwrites defaults).
+
+||Field	||Type	||Default Value	||Description||
+|openTag	|String	|'{{'	|Logical syntax opening tag.|
+|closeTag	|String	|"}}"	|Logical syntax closing tag.|
+|escape	|Boolean	|true	|Whether to encode HTML output characters.|
+|cache	|Boolean	|true	|Whether to open the cache (depending on options of the filename field).|
+|compress	|Boolean	|false	|Whether to remove extra whitespaces in HTML.|
+
+<hr>
+
+## NodeJS
+
+### Installation
+
+	`npm install art-template`
+
+### Usage
+```js
+	var template = require('art-template'); 
 	
-###	使用
+	var data = {
+		list: ["aui", "test"]
+	}; 
+	var html = template(__dirname + '/index/main', data); 
+```	
+### Configuration
 
-	var template = require('art-template');
-	var data = {list: ["aui", "test"]};
-	
-	var html = template(__dirname + '/index/main', data);
+NodeJS version adds the following default configuration:
 
-###	配置
+||Field	||Type	||Default Value	||Description||
+|base	|String	|''	|Specified template directory
+|extname	|String	|'.html'	|Specify the template extension
+|encoding	|String	|'utf-8'	|Specify template coding
 
-NodeJS 版本新增了如下默认配置：
-	
-字段 | 类型 | 默认值| 说明
------------- | ------------- | ------------ | ------------
-base | String | ``''`` | 指定模板目录
-extname | String | ``'.html'`` | 指定模板后缀名
-encoding | String | ``'utf-8'`` | 指定模板编码
-	
-配置``base``指定模板目录可以缩短模板的路径，并且能够避免``include``语句越级访问任意路径引发安全隐患，例如：
-	
-	template.config('base', __dirname);
-	var html = template('index/main', data)
-	
-###	NodeJS + Express
+Configuring base template specified template directory path can be shortened, and can be avoided include statements leapfrog access any path caused safety problems, such as:
 
-	var template = require('art-template');
-	template.config('base', '');
-	template.config('extname', '.html');
-	app.engine('.html', template.__express);
-	app.set('view engine', 'html');
-	//app.set('views', __dirname + '/views');
-	
-运行 demo:
+	template.config('base', __dirname); var html = template('index/main', data) 
 
-	node demo/node-template-express.js
-	
-> 若使用 js 原生语法作为模板语法，请改用 ``require('art-template/node/template-native.js')``
+### NodeJS + Express
 
-##	升级参考
+ var template = require('art-template'); template.config('base', ''); template.config('extname', '.html'); app.engine('.html', template.__express); app.set('view engine', 'html'); //app.set('views', __dirname + '/views'); 
+Run demo:
 
-为了适配 NodeJS express，artTemplate v3.0.0 接口有调整。
+ node demo/node-template-express.js 
+If you are using js native syntax as a template syntax, use require('art-template/node/template-native.js')
+Upgrade Reference
 
-###	接口变更
+To adapt NodeJS express, artTemplate v3.0.0 interface to adjust.
 
-1.	默认使用简洁语法
-2. ``template.render()``方法的第一个参数不再是 id，而是模板字符串
-3. 使用新的配置接口``template.config()``并且字段名有修改
-4. ``template.compile()``方法不支持 id 参数
-5. helper 方法不再强制原文输出，是否编码取决于模板语句
-6. ``template.helpers`` 中的``$string``、``$escape``、``$each``已迁移到``template.utils``中
-7. ``template()``方法不支持传入模板直接编译
+### Interface Changes
 
-###	升级方法
+Concise syntax used by default
+template.render() method is no longer the first parameter is id, but the template string
+Use the new configuration interface template.config() and field names have modified
+template.compile() method does not support the id parameter
+helper methods are no longer mandatory text output, depending on whether the coding template statement
+template.helpers of $string , $ $escape , $ $each have migrated to template.utils in
+template() method does not support passing directly compiled template
 
-1. 如果想继续使用 js 原生语法作为模板语言，请使用 [template-native.js](https://raw.github.com/aui/artTemplate/master/dist/template-native.js)
-2. 查找项目```template.render```替换为```template```
-3. 使用``template.config(name, value)``来替换以前的配置
-4. ``template()``方法直接传入的模板改用``template.compile()``（v2初期版本）
+## Upgrade Notice
 
-## 更新日志
+If you want to continue using js native language syntax as a template, use the template-native.js
+Find items template.render Replace template
+Use template.config(name, value) to replace the previous configuration
+template() method directly into the template instead template.compile() (v2 early version)
 
-###	v3.0.3
+## Changelog
 
-1. 解决``template.helper()``方法传入的数据被转成字符串的问题 #96
-2. 解决``{{value || value2}}``被识别为管道语句的问题 #105 <https://github.com/aui/tmodjs/issues/48>
+### v3.0.3
 
-###	v3.0.2
+* Solved template.helper() method incoming data is converted to a string of issue #96
+* Solved {{value || value2}} is recognized as a pipeline problem statement #105 https://github.com/aui/tmodjs/issues/48
 
-1.	~~解决管道语法必须使用空格分隔的问题~~
+### v3.0.2
+
+* Pipeline syntax must solve the problem of using space-separated
 
 ### v3.0.1
 
-1.	适配 express3.x 与 4.x，修复路径 BUG
+* Adaptation express 3.x and 4.x, repair path BUG
 
 ### v3.0.0
 
-1. 提供 NodeJS 专属版本，支持使用路径加载模板，并且模板的``include``语句也支持相对路径
-2. 适配 [express](http://expressjs.com) 框架
-3. 内置``print``语句支持传入多个参数
-4. 支持全局缓存配置
-5. 简洁语法版支持管道风格的 helper 调用，例如：``{{time | dateFormat:'yyyy年 MM月 dd日 hh:mm:ss'}}``
+* Add NodeJS-exclusive version. Also, add support for: 
+  1.) relative paths, 2.) path templates and 3.) templates include statements. 
+* Adapt/merge express framework goodies.
+* ?Built- print statement supports multiple parameters passed
+* Add support for a global cache configuration.
+* Concise syntax supports pipeline style helper call - for example `{{time | dateFormat:'yyyy MM dd hh:mm:ss'}}`.
+* Due to changes on the interface, please read the [upgrade reference](https://github.com/aui/artTemplate).
 
-当前版本接口有调整，请阅读 [升级参考](#升级参考)
+artTemplate precompiled tool TmodJS updated
 
-> artTemplate 预编译工具 [TmodJS](https://github.com/aui/tmodjs) 已更新
+### v2.0.4
 
-###	v2.0.4
+May generate a syntax error fixes low Andrews browser version compiled (because this version of the browser js engines exist BUG)
 
-1.	修复低版本安卓浏览器编译后可能产生语法错误的问题（因为此版本浏览器 js 引擎存在 BUG）
+### v2.0.3
 
-###	v2.0.3
-
-1.	优化辅助方法性能
-2.	NodeJS 用户可以通过 npm 获取 artTemplate：``$ npm install art-template -g``
-3.	不转义输出语句推荐使用``<%=#value%>``（兼容 v2.0.3 版本之前使用的``<%==value%>``），而简版语法则可以使用``{{#value}}``
-4.	提供简版语法的合并版本 dist/[template-simple.js](https://raw.github.com/aui/artTemplate/master/dist/template-simple.js)
+Helper methods to optimize performance
+NodeJS users can access artTemplate through npm: $ npm install art-template -g
+Does not recommend the use of the escape output statement <%=#value%> (compatible with versions prior to v2.0.3 of <%==value%> ), but you can use the simple version of the syntax {{#value}}
+Provide simple version syntax merged version dist / template-simple.js
 
 ### v2.0.2
 
-1.	优化自定义语法扩展，减少体积
-2.	[重要]为了最大化兼容第三方库，自定义语法扩展默认界定符修改为``{{``与``}}``。
-3.	修复合并工具的BUG [#25](https://github.com/aui/artTemplate/issues/25)
-4.	公开了内部缓存，可以通过``template.cache``访问到编译后的函数
-5.	公开了辅助方法缓存，可以通过``template.helpers``访问到
-6.	优化了调试信息
+Optimized custom syntax extensions, reduce the volume
+[Important] in order to maximize compatible third-party libraries, custom syntax extensions modify the default delimiter {{ and }} .
+Repair merge tool BUG # 25
+Discloses the internal cache, you can template.cache access to the compiled function
+Helper methods disclosed cache, you can template.helpers access to
+Optimized debugging information
+v2.0.1
 
-### v2.0.1
-
-1.	修复模板变量静态分析的[BUG](https://github.com/aui/artTemplate/pull/22)
+Repair template variables static analysis BUG
 
 ### v2.0 release
 
-1.	~~编译工具更名为 atc，成为 artTemplate 的子项目单独维护：<https://github.com/cdc-im/atc>~~
+Compiler tool renamed atc, become artTemplate subprojects separate maintenance: https://github.com/cdc-im/atc
 
 ### v2.0 beta5
 
-1. 修复编译工具可能存在重复依赖的问题。感谢 @warmhug
-2. 修复预编译``include``内部实现可能产生上下文不一致的问题。感谢 @warmhug
-3. 编译工具支持使用拖拽文件进行单独编译
+Repair compiler tools may duplicate dependency problems. Thankswarmhug
+Repair precompiled include internal implementation context inconsistencies may arise. Thankswarmhug
+Compilation tools support the use of drag and drop files compiled separately
 
 ### v2.0 beta4
 
-1. 修复编译工具在压缩模板可能导致 HTML 意外截断的问题。感谢 @warmhug
-2. 完善编译工具对``include``支持支持，可以支持不同目录之间模板嵌套
-3. 修复编译工具没能正确处理自定义语法插件的辅助方法
+Repair compilation tools in the compressed HTML template may lead to an unexpected truncation problem. Thankswarmhug
+Perfect compilation tools include support for support, you can support between different directories nested template
+Repair compiler tool did not properly handle self-assisted method definition syntax plugin
 
 ### v2.0 beta1
 
-1.	对非 String、Number 类型的数据不输出，而 Function 类型求值后输出。
-2.	默认对 html 进行转义输出，原文输出可使用``<%==value%>``（备注：v2.0.3 推荐使用``<%=#value%>``），也可以关闭默认的转义功能``template.defaults.escape = false``。
-3.	增加批处理工具支持把模板编译成不依赖模板引擎的 js 文件，可通过 RequireJS、SeaJS 等模块加载器进行异步加载。
+Non-String, Number data type is not output, while the Function type evaluation output.
+The default output for html escape, the original output can use <%==value%> (Note: v2.0.3 is recommended to use <%=#value%> ), you can turn off the default escape function template.defaults.escape = false .
+Increasing the batch tool support is compiled into the template does not rely on a template engine js file that can be loaded asynchronously via RequireJS, SeaJS modules loader.
 
-## 授权协议
+## License
 
 Released under the MIT, BSD, and GPL Licenses
 
-============
-
-[所有演示例子](http://aui.github.com/artTemplate/demo/index.html) | [引擎原理](http://cdc.tencent.com/?p=5723)
+[All demo examples](http://aui.github.io/artTemplate/demo/index.html) | [engine principle (in chinese)](http://cdc.tencent.com/?p=5723)
 
 © tencent.com

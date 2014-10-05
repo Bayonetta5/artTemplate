@@ -1,11 +1,11 @@
 # **artTemplate**
 
-A state-of-the-*art template* engine in JavaScript.
+Performance-driven, state-of-the-*art template* engine in JavaScript.
 
-* **Clean, concise code!** *< 3kb non-gzipped; < 2kb gzipped; no dependencies.*
-* **Lightning fast!** *Up to 20-30 times faster than "Mustache" and alikes.*
-* **Relevant features built-in!** *Runtime debugging, `include` statements for template components, pre-compiled templates and more.* 
-* **State-of-the-art technology!** *Supports server-side environments, such as Node.JS (+ Express), module loaders like RequireJS and any modern web browser.* 
+* **Clean, concise code!** *Less than 2kb (gzipped) and no dependencies at all.*
+* **Blazingly fast!** *Up to 20-30 times(!) faster than "Mustache" and alikes.*
+* **Valuable features!** *Component `include`s, pre-compiled components, runtime debugging and more.* 
+* **State-of-the-art!** *`artTemplate` works in server side hipster environments (Node.JS + Express), with module loaders (such as RequireJS) and is successfully stress-tested daily by thousands artTemplate app developers (and more unique app users (and devices)), to ensure to always work flawlessly with all modern web browsers.* 
 
 <hr>
 
